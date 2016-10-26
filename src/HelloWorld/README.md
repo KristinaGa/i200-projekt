@@ -1,3 +1,3 @@
-i200 Hello World
+# i200 Hello World
 
 Hello World katsetused Javas.
