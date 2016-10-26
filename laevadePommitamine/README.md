@@ -1,0 +1,1 @@
+Laevade pommitamine on äge
