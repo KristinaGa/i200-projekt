@@ -1,26 +1,37 @@
-import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-/**
- * Created by Kristina on 02/01/17.
- */
+
 public class LoginAken {
-    TextField kasutajanimi;
-    PasswordField password;
-    VBox login;
-    Button loginNupp;
-    Hyperlink registreeri;
-    Stage stage = new Stage();
+    private TextField kasutajanimi;
+    private PasswordField password;
+    private VBox login;
+    private Button loginNupp;
+    private Hyperlink registreeri;
+    private Stage stage = new Stage();
+    private Label teavitus;
 
 //    Constructor, käivitame vajalikud funktsioonid
     LoginAken() {
+        teavitus = new Label();
         loginEkraan();
         setupLoginNupp();
         setupRegistreeri();
+    }
+
+//  Funktsioonid teadet jaoks
+    private void annaViga(String teade){
+        teavitus.setText(teade);
+        teavitus.setTextFill(Color.RED);
+    }
+
+    private void teata(String teade){
+        teavitus.setText(teade);
+        teavitus.setTextFill(Color.BURLYWOOD);
     }
 
     private void loginEkraan(){
@@ -42,7 +53,7 @@ public class LoginAken {
         loginNupp = new Button("Logi sisse");
         registreeri = new Hyperlink("Registreeri");
 
-        login.getChildren().addAll(kasutajanimiLabel, kasutajanimi, passwordLabel, password, loginNupp, registreeri);
+        login.getChildren().addAll(kasutajanimiLabel, kasutajanimi, passwordLabel, password, loginNupp, registreeri, teavitus);
 
         stage.setScene(loginScene);
         stage.show();
@@ -51,15 +62,32 @@ public class LoginAken {
     private void setupLoginNupp() {
 //        login nupu loogika ja liikumine näitude sisestamise ekraanile
         loginNupp.setOnAction(event -> {
-            new SisestaNaidud();
-            stage.close();
+            String username = kasutajanimi.getText();
+            String parool = password.getText();
+
+        if (!username.isEmpty() && !parool.isEmpty()){ //kontrollime, ega väljad pole tühjad
+            try {
+                Veenaidud naidud = new Veenaidud();
+                Integer kasutaja_id = naidud.login(username, parool);
+                naidud.sulgeYhendus();
+
+                if (kasutaja_id != 0) {
+                    new SisestaNaidud(kasutaja_id);
+                    stage.close();
+                }
+            } catch (Exception e) {
+                annaViga("Selliste andmetega kasutajat ei ole");
+            }
+        } else { //kui kumbki väli oli tühi, siis anna sellest teada
+            annaViga("Mõlemad väljad peavad olema täidetud!");
+        }
         });
     }
 
+    //        registreeri nupu loogika ja kasutaja registreerimine
     private void setupRegistreeri() {
-//        registreeri nupu loogika ja kasutaja registreerimine..
         registreeri.setOnAction(event -> {
-            new SisestaNaidud();
+            new KasutajaAndmed(0);
             stage.close();
         });
     }
