@@ -2,13 +2,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
 import java.util.HashMap;
 
 public class KasutajaAndmed {
@@ -26,6 +23,7 @@ public class KasutajaAndmed {
     private HashMap<String, String> andmed;
     private Veenaidud naidud;
 
+//  Constructor, käivitame vajalikud funktsioonid
     KasutajaAndmed(Integer user_id) {
         naidud = new Veenaidud();
         kasutaja_id = user_id;
@@ -35,16 +33,16 @@ public class KasutajaAndmed {
         setupSalvesta();
     }
 
-    public void kasutajaAndmeteEkraan() {
+//  Joonistame Andmete ekraani väljad ja sildid
+    private void kasutajaAndmeteEkraan() {
         kasutajaAndmed = new VBox();
         kasutajaAndmed.setAlignment(Pos.CENTER);
         Scene kasutajaScene = new Scene(kasutajaAndmed, 300, 500);
         stage.setScene(kasutajaScene);
 
-        stage.setTitle("Muuda andmeid");
+        stage.setTitle("Kasutaja andmed");
 
         andmed = naidud.saaKasutajaAndmed(kasutaja_id);
-
 
         Label nimiLabel = new Label("Täisnimi");
         nimi = new TextField(andmed.get("name"));
@@ -66,7 +64,6 @@ public class KasutajaAndmed {
         aadress = new TextField(andmed.get("address"));
         aadress.setMaxWidth(200);
 
-
         tagasi = new Button("Tagasi");
         salvesta = new Button("Salvesta");
 
@@ -75,23 +72,24 @@ public class KasutajaAndmed {
         stage.show();
     }
 
-//    Tagasi nupu loogika
+//  Tagasi nupu loogika
     private void setupTagasi(){
         tagasi.setOnAction(event -> {
             if (kasutaja_id != 0) { //kui on olemasolev kasutaja, lähme tagasi näitude ekraanile
                 new SisestaNaidud(kasutaja_id);
                 stage.close();
             } else { //muul juhul lähme tagasi login ekraanile
-              new LoginAken();
+                new LoginAken();
                 stage.close();
             }
         });
     }
 
-//    siia peab tegema ka salvestamise nupu loogika
+//  Salvestamise nupu loogika
     private void setupSalvesta(){
         salvesta.setOnAction(event -> {
-            //Saame uuesti sisestatud andmed , juhuks kui midagi on muutunud
+
+            //  Saame uuesti sisestatud andmed, juhuks kui midagi on muutunud
             andmed.put("user_id", String.valueOf(kasutaja_id));
             andmed.put("username", kasutajanimi.getText());
             andmed.put("password", parool.getText());

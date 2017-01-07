@@ -4,14 +4,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
+
 public class SisestaNaidud {
-/*    siin määrame ära need elemendid, mida kõikides funktsioonides on võimalik kasutada --> kui teeks ainult ühe funktsiooni sees
-    siis teised ei näeks neid ja ei saaks väärtusi kasutada */
     private Stage stage = new Stage();
     private VBox veenaidud;
     private TextField soenait;
@@ -24,15 +22,14 @@ public class SisestaNaidud {
     private Label teavitus;
     private Veenaidud naidud;
 
-
     SisestaNaidud(Integer user_id) {
         naidud = new Veenaidud();
         kasutaja_id = user_id;
         teavitus = new Label();
         naitudeAken();
         naitudeSaatmine();
-        andmeteMuutmine();
-        valjaLogimine();
+        setupMinuAndmed();
+        setupLogout();
     }
 
     private void naitudeAken() {
@@ -56,7 +53,6 @@ public class SisestaNaidud {
         kulmnait.setPromptText(andmed.get("eelmineKylm"));
         kulmnait.setMaxWidth(100);
 
-
         saadaNait = new Button("Saada näidud");
         logOut = new Button("Logi välja");
 
@@ -66,6 +62,7 @@ public class SisestaNaidud {
         stage.show();
     }
 
+//  Näitude saatmine ja kontroll, kas sisestati korrektsed andmed
     private void naitudeSaatmine() {
         saadaNait.setOnAction(event -> {
 
@@ -80,34 +77,37 @@ public class SisestaNaidud {
 
             if (!soe.isEmpty() && !kylm.isEmpty()) {
                 try {
-//                    Kontrollime, kas sisestatud näidud olid numbrid - kui mitte, siis saame errori
+                    //  Kontrollime, kas sisestatud näidud olid numbrid - kui mitte, siis saame errori
                     Integer soeNumber = Integer.parseInt(soe);
                     Integer kylmNumber = Integer.parseInt(kylm);
-
-                    //tegelik salvestamine
-                    naidud.salvestaNaidud(kasutaja_id, kuupaev, soe, kylm);
-
-                    teavitus.setText("Näidud edukalt saadetud");
-                    teavitus.setTextFill(Color.BURLYWOOD);
+                    try {
+                        //  Tegelik salvestamine
+                        naidud.salvestaNaidud(kasutaja_id, kuupaev, soe, kylm);
+                        teavitus.setText("Näidud edukalt saadetud");
+                        teavitus.setTextFill(Color.BURLYWOOD);
+                    } catch (Exception e) {
+                        teavitus.setText("Näitude saatmine ebaõnnestus");
+                        teavitus.setTextFill(Color.RED);
+                    }
                 } catch (Exception e) {
-                    teavitus.setText("Näitude saatmine ebaõnnestus");
+                    teavitus.setText("Lubatud on ainult numbrid");
                     teavitus.setTextFill(Color.RED);
                 }
-            }else {
+            } else {
                 teavitus.setText("Mõlemad väljad peavad olema täidetud");
                 teavitus.setTextFill(Color.RED);
             }
         });
     }
 
-    private void andmeteMuutmine() {
+    private void setupMinuAndmed() {
         minuAndmed.setOnAction(event -> {
             new KasutajaAndmed(kasutaja_id);
             stage.close();
         });
     }
 
-    private void valjaLogimine() {
+    private void setupLogout() {
         logOut.setOnAction(event -> {
             new LoginAken();
             stage.close();

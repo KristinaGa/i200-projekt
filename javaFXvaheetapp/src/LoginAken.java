@@ -15,7 +15,7 @@ public class LoginAken {
     private Stage stage = new Stage();
     private Label teavitus;
 
-//    Constructor, käivitame vajalikud funktsioonid
+//  Constructor, käivitame vajalikud funktsioonid
     LoginAken() {
         teavitus = new Label();
         loginEkraan();
@@ -23,19 +23,14 @@ public class LoginAken {
         setupRegistreeri();
     }
 
-//  Funktsioonid teadet jaoks
+//  Funktsioonid teadete jaoks
     private void annaViga(String teade){
         teavitus.setText(teade);
         teavitus.setTextFill(Color.RED);
     }
 
-    private void teata(String teade){
-        teavitus.setText(teade);
-        teavitus.setTextFill(Color.BURLYWOOD);
-    }
-
+//  Joonistame Login ekraani väljad ja sildid
     private void loginEkraan(){
-//        joonistame Login ekraani väljad ja sildid
         stage.setTitle("Veenäitude esitamine");
 
         login = new VBox();
@@ -59,8 +54,8 @@ public class LoginAken {
         stage.show();
     }
 
+//  Login nupu loogika ja liikumine näitude sisestamise ekraanile
     private void setupLoginNupp() {
-//        login nupu loogika ja liikumine näitude sisestamise ekraanile
         loginNupp.setOnAction(event -> {
             String username = kasutajanimi.getText();
             String parool = password.getText();
@@ -74,6 +69,8 @@ public class LoginAken {
                 if (kasutaja_id != 0) {
                     new SisestaNaidud(kasutaja_id);
                     stage.close();
+                } else {
+                    annaViga("Vale parool!");
                 }
             } catch (Exception e) {
                 annaViga("Selliste andmetega kasutajat ei ole");
@@ -84,7 +81,7 @@ public class LoginAken {
         });
     }
 
-    //        registreeri nupu loogika ja kasutaja registreerimine
+//  Registreeri nupu loogika ja kasutaja registreerimine
     private void setupRegistreeri() {
         registreeri.setOnAction(event -> {
             new KasutajaAndmed(0);
