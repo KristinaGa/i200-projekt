@@ -56,7 +56,7 @@ public class KasutajaAndmed {
         parool = new TextField(andmed.get("password"));
         parool.setMaxWidth(200);
 
-        Label saajameilLabel = new Label("Saaja E-mail");
+        Label saajameilLabel = new Label("Saaja e-mail");
         saajaemail = new TextField(andmed.get("saajaemail"));
         saajaemail.setMaxWidth(200);
 
